@@ -1,0 +1,22 @@
+fastapi[all]
+uvicorn
+pandas
+scikit-learn
+redis
+python-dotenv
+SQLAlchemy
+PyMySQL
+pydantic_settings
+numpy
+matplotlib
+PyJWT
+cryptography
+python-multipart
+beautifulsoup4
+requests
+html5lib
+psutil
+fastapi-jwt-auth # A mock package for demonstration
+uvloop
+httpx
+line-bot-sdk # For LINE Bot integration

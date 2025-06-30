@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # --- Backend FastAPI Service ---
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: agribridge-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agribridge-network
+
+  # --- Frontend Vue.js Service ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: agribridge-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - agribridge-network
+
+  # --- MySQL Database ---
+  db:
+    image: mysql:8.0
+    container_name: agribridge-mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck: # Added health check
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - agribridge-network
+
+  # --- Redis Cache ---
+  redis:
+    image: redis:7.0-alpine
+    container_name: agribridge-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck: # Added health check
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - agribridge-network
+    
+  # --- DB Admin UI ---
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: agribridge-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+    networks:
+      - agribridge-network
+
+# --- Data Volumes for Persistence ---
+volumes:
+  mysql_data:
+
+# --- Define a bridge network for containers to communicate ---
+networks:
+  agribridge-network:
+    driver: bridge
