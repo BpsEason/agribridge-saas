@@ -6,15 +6,16 @@ The AgriBridge platform utilizes a MySQL database with a multi-tenant design, wh
 
 ```mermaid
 erDiagram
-    TENANTS ||--o{ FARMERS : owns
-    TENANTS ||--o{ PRODUCTS : owns
-    TENANTS ||--o{ ORDERS : owns
-    FARMERS ||--o{ PRODUCTS : provides
+    TENANTS ||--o{ FARMERS : 擁有
+    TENANTS ||--o{ PRODUCTS : 擁有
+    TENANTS ||--o{ ORDERS : 擁有
+    FARMERS ||--o{ PRODUCTS : 提供
 
     TENANTS {
         id PK
         name UK
     }
+
     FARMERS {
         id PK
         tenant_id FK
@@ -23,6 +24,7 @@ erDiagram
         esg_score
         total_sales
     }
+
     PRODUCTS {
         id PK
         tenant_id FK
@@ -30,6 +32,7 @@ erDiagram
         price
         farmer_id FK
     }
+
     ORDERS {
         id PK
         tenant_id FK
