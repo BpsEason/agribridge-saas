@@ -6,10 +6,10 @@ The AgriBridge platform utilizes a MySQL database with a multi-tenant design, wh
 
 ```mermaid
 erDiagram
-    TENANTS ||--o{ FARMERS : has
-    TENANTS ||--o{ PRODUCTS : has
-    TENANTS ||--o{ ORDERS : has
-    FARMERS ||--o{ PRODUCTS : provides
+    TENANTS ||--o{ FARMERS : 擁有
+    TENANTS ||--o{ PRODUCTS : 擁有
+    TENANTS ||--o{ ORDERS : 擁有
+    FARMERS ||--o{ PRODUCTS : 提供
 
     TENANTS {
         INTEGER id PK
@@ -42,6 +42,7 @@ erDiagram
         INTEGER buyer_id
         VARCHAR(50) status
     }
+
 ```
 
 ## Table Descriptions
