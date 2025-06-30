@@ -12,37 +12,36 @@ erDiagram
     FARMERS ||--o{ PRODUCTS : 提供
 
     TENANTS {
-        INTEGER id PK
-        VARCHAR(255) name UK
+        int id PK
+        string name UK
     }
 
     FARMERS {
-        INTEGER id PK
-        INTEGER tenant_id FK
-        VARCHAR(255) name INDEX
-        VARCHAR(255) location
-        FLOAT esg_score
-        FLOAT total_sales
+        int id PK
+        int tenant_id FK
+        string name INDEX
+        string location
+        number esg_score
+        number total_sales
     }
 
     PRODUCTS {
-        INTEGER id PK
-        INTEGER tenant_id FK
-        VARCHAR(255) name
-        FLOAT price
-        INTEGER farmer_id FK
+        int id PK
+        int tenant_id FK
+        string name
+        number price
+        int farmer_id FK
     }
 
     ORDERS {
-        INTEGER id PK
-        INTEGER tenant_id FK
-        INTEGER product_id FK
-        INTEGER quantity
-        FLOAT total_price
-        INTEGER buyer_id
-        VARCHAR(50) status
+        int id PK
+        int tenant_id FK
+        int product_id FK
+        int quantity
+        number total_price
+        int buyer_id
+        string status
     }
-
 ```
 
 ## Table Descriptions
