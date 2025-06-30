@@ -21,15 +21,15 @@ erDiagram
         int tenant_id FK
         string name INDEX
         string location
-        number esg_score
-        number total_sales
+        float esg_score
+        float total_sales
     }
 
     PRODUCTS {
         int id PK
         int tenant_id FK
         string name
-        number price
+        float price
         int farmer_id FK
     }
 
@@ -38,7 +38,7 @@ erDiagram
         int tenant_id FK
         int product_id FK
         int quantity
-        number total_price
+        float total_price
         int buyer_id
         string status
     }
