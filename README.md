@@ -1,6 +1,6 @@
 # AgriBridge SaaS 平台
 
-**AgriBridge** 是一個模組化的農業 SaaS 平台，專為永續農業設計，旨在提升效率與透明度。結合 **多租戶架構**、**LINE Bot 通知**、**IoT 數據監測**、**區塊鏈交易追蹤** 與 **ESG 報表可視化**，為農民與買家提供數據驅動解決方案。本專案僅包含核心代碼，需手動安裝外部套件，確保系統穩定、可擴展，符合台灣工程師的務實需求。
+**AgriBridge** 是一個模組化的農業 SaaS 平台，專為永續農業設計，旨在提升效率與透明度。結合 **多租戶架構**、**LINE Bot 通知**、**IoT 數據監測**、**區塊鏈交易追蹤** 與 **ESG 報表可視化**，為農民與買家提供數據驅動解決方案。本專案僅包含核心代碼，需手動安裝外部套件，確保系統穩定、可擴展，符合台灣工程師的務實需求。倉庫連結：[https://github.com/BpsEason/agribridge-saas.git](https://github.com/BpsEason/agribridge-saas.git)
 
 ## 核心功能
 - **多租戶 SaaS 架構**：透過 `tenant_id` 實現數據隔離，確保農民、產品、訂單資料獨立。
@@ -73,6 +73,7 @@ agribridge-saas/
 ├── .github/workflows/     # CI/CD 流程
 ├── .env                   # 環境變數
 ├── docker-compose.yml     # Docker Compose 配置
+├── LICENSE                # MIT 授權文件
 └── README.md              # 專案說明
 ```
 
@@ -116,17 +117,14 @@ A: 使用 `pydantic_settings` 的 `BaseSettings` 驗證 `JWT_SECRET_KEY`, `DATAB
 A: 在 `api/main.py`，`create_initial_data` 於啟動時檢查並插入預設租戶與角色數據，確保首次部署或測試環境具備最小運行條件。
 
 **Q: 後端訂單管理與 LINE 通知如何實現？**  
-A: 在 `api/routes/orders.py`，訂單管理支援多租戶隔離與 LINE 通知。透過 POST `/api/v1/orders` 創建訂單，驗證 `tenant_id` 確保隔離，儲存至 MySQL 的 `orders` 表，並使用 `line-bot-sdk` 發送通知。流程如下：
-1. 驗證 JWT 取得 `current_user` 的 `tenant_id`。
-2. 檢查租戶存在，創建訂單（含 `product_id`, `quantity`, `total_price`）。
-3. 使用 `LineBotApi` 推送訊息至用戶的 `line_user_id`，訊息包含訂單詳情。
+A: 在 `api/routes/orders.py`，訂單管理支援多租戶隔離與 LINE 通知。透過 POST `/api/v1/orders` 創建訂單，驗證 `tenant_id` 確保隔離，儲存至 MySQL 的 `orders` 表，使用 `line-bot-sdk` 推送訊息至 `line_user_id`，包含訂單詳情（如商品 ID、數量）。
 
 ### 3. 前端 (Vue.js) 相關
 **Q: 前端如何處理登入、登出與 JWT 驗證？**  
 A: `LoginView.vue` 透過 `axios.post('/api/v1/auth/login')` 提交帳密，獲取 JWT 存於 `localStorage`，Pinia（`stores/auth.js`）管理認證狀態。登出清除 `localStorage` 和 Pinia 狀態，重定向至登入頁。API 請求攜帶 `Authorization: Bearer <token>`。
 
 **Q: DashboardView.vue 如何處理錯誤？為什麼重要？**  
-A: 使用 `vue-toastification` 顯示錯誤提示，`try-catch` 包裝 `axios` 請求，失敗時觸發 toast（如 `this.$toast.error('載入數據失敗')`）。這提供清晰用戶反饋，提升體驗，便於除錯，特別在處理 ESG 或 IoT 數據時。
+A: 使用 `vue-toastification` 顯示錯誤提示，`try-catch` 包裝 `axios` 請求，失敗時觸發 toast（如 `this.$toast.error('載入數據失敗')`）。這提供清晰用戶反饋，提升體驗，便於除錯。
 
 **Q: DashboardView.vue 如何整合 Chart.js？**  
 A: 在 `DashboardView.vue`，透過 `axios.get('/api/v1/esg-report')` 獲取 ESG 數據，於 `onMounted` 勾子使用 Chart.js 渲染柱狀圖，展示環境、社會、治理分數。配置 `type="module"` 確保 ES 模組相容，`responsive: true` 適應不同設備。
@@ -191,7 +189,7 @@ A: 實現真實區塊鏈整合（如 Ethereum）與 IoT 即時數據流，提升
 
 1. **複製儲存庫**：
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/BpsEason/agribridge-saas.git
    cd agribridge-saas
    ```
 
@@ -411,7 +409,7 @@ A: 這表示 JavaScript 文件未被識別為 ES 模組。請檢查：
 5. 提交 Pull Request。
 
 ## 授權
-MIT 授權，詳見 `LICENSE`。
+本專案採用 MIT 授權，詳見 `LICENSE` 文件。
 
 ---
 
